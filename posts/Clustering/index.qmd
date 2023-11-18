@@ -7,12 +7,13 @@ image: "image.jpg"
 ---
 
 Clustering is an unsupervised learning method that divides data points into a number of groups based on similar properties. There are multiple different clustering methods vary in the distance calculations to determine the clusters. Some of these algorithms are:
--K-Means
--Affinity Propagation
--Mean-Shift
--DBSCAN
--Gaussian Mixtures
--Spectral Clustering
+
+* K-Means
+* Affinity Propagation
+* Mean-Shift
+* DBSCAN
+* Gaussian Mixtures
+* Spectral Clustering
 
 We will focus on DBSCAN - Density-Based Spacial Clustering of Applications With Noise. 
 
@@ -20,13 +21,15 @@ One problem with some of the other clustering algorithms is that they only work 
 
 ![](PicsArt_11-17-08.07.10-300x300.jpg)
 
+Clusters are inherently high-density areas of space that are surrounded by lower-density space. When humans look at images we can identify the clusters easily, but some of these models go based on pure distance instead of looking at density and this is where DBSCAN can be especially useful in cases with more complex shapes and noise.
+
 **DBSCAN Algorithm**
 
 1. Define Parameters
 
--**eps** is the maximum distance between two points in order for them to be considered neighbors. If eps is too small, many points will be labeled as outliers, and if eps is too large we will not have definition in our clusters. We can use the k-distance graph to find our eps value.
+* **Epsilon (eps)** is the maximum distance between two points in order for them to be considered neighbors. If epsilon is too small, many points will be labeled as outliers, and if epsilon is too large we will not have definition in our clusters. We can use the k-distance graph to find our epsilon value.
 
--**MinPts** is the minimum number of neighbors within the eps radius. A general rule is MinPts >= number of dimensions in the dataset + 1. The minimum value of MinPts is 3.
+* **Minimum Points (MinPts)** is the minimum number of neighbors within the epsilon radius. The minimum value of MinPts is 3, but as the dataset gets larger our MinPts paramter should also get larger.
 
 2. Find all neighbor points within eps and identify core points - the points that have more than MinPts within its eps radius. 
 
@@ -35,6 +38,8 @@ One problem with some of the other clustering algorithms is that they only work 
 4. Find all density-connected points to the core point and assign to the same cluster. Two points are density-connected if there is a core point that contains both points within its eps radius. 
 
 5. Points that do not belong to a cluster are considered noise.
+
+**Example with Code** 
 
 ```{r}
 library(factoextra)
@@ -47,16 +52,61 @@ multishapes <- multishapes[, 1:2]
 plot(multishapes)
 ```
 
-Let's see how K-Means would cluster this dataset.
+In this plot we can see that there are 5 different clusters: 2 ovals at the top of the image, 2 lines at the bottom left, and one dense cluster at the bottom right.
+
+**Let's see how K-Means would cluster this dataset:**
 
 ```{r}
 km_res <- kmeans(multishapes, 5, nstart = 25)
 plot(multishapes, col=km_res$cluster+1, main="K-means")
 ```
-Now let's see if DBSCAN does a better job
 
+We can see that this may not be the best possible clusters. We would expect to see the circles be one cluster each not split into to 3 different clusters across the 2 circles. K-Means did not separate the 2 lines into different clusters either.
+
+**Now let's see if DBSCAN does a better job:**
+
+First we must decide our value of eps using the k-distance plot. We set k=5 since we are going to use minPts=5. The value of eps we want to use is where the elbow of the graph is.
 ```{r}
 library(dbscan)
+kNNdistplot(multishapes, k=5)
+```
+We see that our elbow is below 0.2, so we will use eps=0.15 for our inital DBSCAN algorithm.
+
+```{r}
 dbscan_res <- dbscan(multishapes, eps = 0.15, minPts = 5)
 plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
 ```
+
+Now the clusters look much more like how we would have expected. We also see the noisy points in black are not part of any cluster.
+
+
+**Parameter Effects**
+
+Let's see first hand how changing our 2 parameters effect the clusters we find. 
+
+1. **Smaller eps**
+
+```{r}
+dbscan_res <- dbscan(multishapes, eps = 0.05, minPts = 5)
+plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
+```
+
+We see way too many of our points are outliers. 
+
+2. **Larger eps**
+
+```{r}
+dbscan_res <- dbscan(multishapes, eps = 0.45, minPts = 5)
+plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
+```
+
+With the larger eps value we now only have 2 clusters, meaning we lose a lot of the details of our points. 
+
+3. **Larger minPts**
+
+```{r}
+dbscan_res <- dbscan(multishapes, eps = 0.15, minPts = 7)
+plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
+```
+
+Now we have a situation where there are now too many clusters and it is more complicated than is necessary. 

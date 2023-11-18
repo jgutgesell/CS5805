@@ -3,7 +3,34 @@ title: "Classification"
 author: "Julia Gutgesell"
 date: "2023-11-16"
 categories: [news, code, analysis]
-image: "image.jpg"
 ---
 
-Post with code
+Unlike clustering which is an unsupervised technique, meaning that there are not labels or classes on the data, classification is the process of assigning data points to one of the predetermined classes given.
+
+![](classification.png)
+
+One clustering algorithm is **Decision Trees**, which learn decision rules from data features to build a tree that can be followed to determine the chosen class for a new data point. 
+
+![](tree.png)
+
+```{r}
+library(tree)
+
+irisTree <- tree(Species ~ ., data = iris)
+plot(irisTree, lwd = 2)
+text(irisTree, cex = 1.3)
+```
+
+
+```{r}
+predict_frame_iris <- data.frame(iris, prediction = predict(irisTree, iris, type = "class"))
+
+library(caret)
+(train_tab = table(predict_frame_iris$Species, predict_frame_iris$prediction))
+train_con_mat = confusionMatrix(train_tab, positive = "setosa")
+train_con_mat
+
+```
+
+
+

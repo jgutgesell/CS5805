@@ -1,0 +1,14 @@
+{
+  "hash": "83c1c32e2b46a7d8e56f0988d9df61bb",
+  "result": {
+    "markdown": "---\ntitle: \"Anomaly and Outlier Detection\"\nauthor: \"Julia Gutgesell\"\ndate: \"2023-11-16\"\ncategories: [news, code, analysis]\nimage: \"image.jpg\"\n---\n\n\nThis is a post with executable code.\n\n\n::: {.cell}\n\n```{.r .cell-code}\n1 + 1\n```\n\n::: {.cell-output .cell-output-stdout}\n```\n[1] 2\n```\n:::\n:::\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

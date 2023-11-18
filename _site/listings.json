@@ -1,0 +1,14 @@
+[
+  {
+    "listing": "/index.html",
+    "items": [
+      "/posts/Classification/index.html",
+      "/posts/post-with-code/index.html",
+      "/posts/Linear and Nonlinear Regression/index.html",
+      "/posts/Anomaly and Outlier Detection/index.html",
+      "/posts/Probability Theory and Random Variables/index.html",
+      "/posts/Clustering/index.html",
+      "/posts/welcome/index.html"
+    ]
+  }
+]

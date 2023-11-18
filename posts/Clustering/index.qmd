@@ -23,6 +23,7 @@ One problem with some of the other clustering algorithms is that they only work 
 **DBSCAN Algorithm**
 
 1. Define Parameters
+
 -**eps** is the maximum distance between two points in order for them to be considered neighbors. If eps is too small, many points will be labeled as outliers, and if eps is too large we will not have definition in our clusters. We can use the k-distance graph to find our eps value.
 
 -**MinPts** is the minimum number of neighbors within the eps radius. A general rule is MinPts >= number of dimensions in the dataset + 1. The minimum value of MinPts is 3.

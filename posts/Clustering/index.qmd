@@ -1,13 +1,61 @@
 ---
 title: "Clustering"
 author: "Julia Gutgesell"
-date: "2023-11-16"
+date: "2023-11-18"
 categories: [news, code, analysis]
 image: "image.jpg"
 ---
 
-This is a post with executable code.
+Clustering is an unsupervised learning method that divides data points into a number of groups based on similar properties. There are multiple different clustering methods vary in the distance calculations to determine the clusters. Some of these algorithms are:
+-K-Means
+-Affinity Propagation
+-Mean-Shift
+-DBSCAN
+-Gaussian Mixtures
+-Spectral Clustering
+
+We will focus on DBSCAN - Density-Based Spacial Clustering of Applications With Noise. 
+
+One problem with some of the other clustering algorithms is that they only work well when the clusters are separate and compact. Noise and outliers can cause problems with other clustering methods. In real life datasets clusters could be arbitrary shapes and have noise and as we can see below DBSCAN is sometimes needed to be used instead of other clustering models such as K-Means. 
+
+![](PicsArt_11-17-08.07.10-300x300.jpg)
+
+**DBSCAN Algorithm**
+
+1. Define Parameters
+-**eps** is the maximum distance between two points in order for them to be considered neighbors. If eps is too small, many points will be labeled as outliers, and if eps is too large we will not have definition in our clusters. We can use the k-distance graph to find our eps value.
+
+-**MinPts** is the minimum number of neighbors within the eps radius. A general rule is MinPts >= number of dimensions in the dataset + 1. The minimum value of MinPts is 3.
+
+2. Find all neighbor points within eps and identify core points - the points that have more than MinPts within its eps radius. 
+
+3. For each core point if it has not been assigned a cluster, create a new cluster with that point.
+
+4. Find all density-connected points to the core point and assign to the same cluster. Two points are density-connected if there is a core point that contains both points within its eps radius. 
+
+5. Points that do not belong to a cluster are considered noise.
 
 ```{r}
-1 + 1
+library(factoextra)
+
+# set random seed to make reproducable results 
+set.seed(123456789)
+
+# extract x and y coordinates
+multishapes <- multishapes[, 1:2]
+plot(multishapes)
+```
+
+Let's see how K-Means would cluster this dataset.
+
+```{r}
+km_res <- kmeans(multishapes, 5, nstart = 25)
+plot(multishapes, col=km_res$cluster+1, main="K-means")
+```
+Now let's see if DBSCAN does a better job
+
+```{r}
+library(dbscan)
+dbscan_res <- dbscan(multishapes, eps = 0.15, minPts = 5)
+plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
 ```

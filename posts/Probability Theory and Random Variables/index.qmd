@@ -1,13 +1,55 @@
 ---
 title: "Probability Theory and Random Variables"
 author: "Julia Gutgesell"
-date: "2023-11-16"
+date: "2023-11-21"
 categories: [news, code, analysis]
-image: "image.jpg"
 ---
 
-This is a post with executable code.
+Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty. 
 
-```{r}
-1 + 1
+Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the some of all probabilities of an event have to equal 1. 
+
+![](axioms.png)
+
+To describe the probabilities that random variable $x$ can take on each specific outcome of the event we can use a **probability distribution**. There are two different types of probability distributions: discrete and continuous. 
+
+**Discrete Distributions**
+
+Discrete distributions are when the outcomes are finite like heads or tails of a coin. A Bernoulli distribution is an example of a discrete distribution where there are only 2 potential outcomes. The probability mass function of a Bernoulli distribution of a fair coin flip is P(x) = {0.5 if x = heads, 0.5 if x = tails}. 
+
+**Continous Distributions**
+
+Continuous distributions have infinitely many outcomes, for example heights. One well known continuous distribution is the normal distribution which can be visualized with the bell curve.
+
+```{r echo=FALSE}
+x <- seq(-4, 4, .01)
+#calculate normal CDF probabilities
+density <- dnorm(x)
+ #plot normal PDF
+plot(x, density, type="l", main = "Normal Distribution Curve")
 ```
+
+Unlike discrete distributions where the value of the probability mass function at $x$ is the probability of of $x$, in the continuous distribution since there are infinitely many outcomes the probability of X = $x$ is actually 0. All of our probabilities must sum to 1, when looking at the normal distribution curve that means that the area under the curve must also be 1. So instead of using a summation, we look at intervals in the continous case.
+
+![](integral.png)
+
+So instead of looking at the probability of an event at a specific value which we now know is 0, we can use ranges of X and calculate the area under the curve for those ranges to find meaningful probabilities in the continuous case. We can use something called the cumulative distribution function which takes the probability density function we saw above and calculates the area under the curve to the left of $x$. This is what the CDF of the normal distribution looks like:
+
+```{r echo=FALSE}
+x <- seq(-4, 4, .01)
+#calculate normal CDF probabilities
+density <- pnorm(x)
+ #plot normal PDF
+plot(x, density, type="l", main = "Normal Cumulative Distribution")
+```
+
+Now we can see probabilities much easier such as P($x$ < -3) is nearly 0 and P($x$ < 3) is nearly 1. 
+
+**Conditional Probability Distributions**
+
+
+
+**Bayesian Probability and Bayes' Rule**
+
+A well known probability philosophy is **Bayesian Probability**. Unlike an objective perspective where known beliefs are used, a subjective perspective where the observer's own learnings and experience are used, Bayesian probability combines prior beliefs with observations. We can use Bayes' Rule to calculate our probabilities.
+

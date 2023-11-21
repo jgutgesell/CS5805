@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Julia Gutgesell">
-<meta name="dcterms.date" content="2023-11-16">
+<meta name="dcterms.date" content="2023-11-21">
 
 <title>CS5805 - Probability Theory and Random Variables</title>
 <style>
@@ -21,40 +21,6 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
-}
-/* CSS for syntax highlighting */
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-div.sourceCode { margin: 1em 0; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-  }
-pre.numberSource { margin-left: 3em;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -96,6 +62,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -159,7 +127,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 16, 2023</p>
+        <p class="date">November 21, 2023</p>
       </div>
     </div>
     
@@ -177,13 +145,31 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>This is a post with executable code.</p>
+<p>Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty.</p>
+<p>Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the some of all probabilities of an event have to equal 1.</p>
+<p><img src="axioms.png" class="img-fluid"></p>
+<p>To describe the probabilities that random variable <span class="math inline">\(x\)</span> can take on each specific outcome of the event we can use a <strong>probability distribution</strong>. There are two different types of probability distributions: discrete and continuous.</p>
+<p><strong>Discrete Distributions</strong></p>
+<p>Discrete distributions are when the outcomes are finite like heads or tails of a coin. A Bernoulli distribution is an example of a discrete distribution where there are only 2 potential outcomes. The probability mass function of a Bernoulli distribution of a fair coin flip is P(x) = {0.5 if x = heads, 0.5 if x = tails}.</p>
+<p><strong>Continous Distributions</strong></p>
+<p>Continuous distributions have infinitely many outcomes, for example heights. One well known continuous distribution is the normal distribution which can be visualized with the bell curve.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>Unlike discrete distributions where the value of the probability mass function at <span class="math inline">\(x\)</span> is the probability of of <span class="math inline">\(x\)</span>, in the continuous distribution since there are infinitely many outcomes the probability of X = <span class="math inline">\(x\)</span> is actually 0. All of our probabilities must sum to 1, when looking at the normal distribution curve that means that the area under the curve must also be 1. So instead of using a summation, we look at intervals in the continous case.</p>
+<p><img src="integral.png" class="img-fluid"></p>
+<p>So instead of looking at the probability of an event at a specific value which we now know is 0, we can use ranges of X and calculate the area under the curve for those ranges to find meaningful probabilities in the continuous case. We can use something called the cumulative distribution function which takes the probability density function we saw above and calculates the area under the curve to the left of <span class="math inline">\(x\)</span>. This is what the CDF of the normal distribution looks like:</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Now we can see probabilities much easier such as P(<span class="math inline">\(x\)</span> &lt; -3) is nearly 0 and P(<span class="math inline">\(x\)</span> &lt; 3) is nearly 1.</p>
+<p><strong>Conditional Probability Distributions</strong></p>
+<p><strong>Bayesian Probability and Bayes’ Rule</strong></p>
+<p>A well known probability philosophy is <strong>Bayesian Probability</strong>. Unlike an objective perspective where known beliefs are used, a subjective perspective where the observer’s own learnings and experience are used, Bayesian probability combines prior beliefs with observations. We can use Bayes’ Rule to calculate our probabilities.</p>
 
 
 

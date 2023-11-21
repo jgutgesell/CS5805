@@ -9,10 +9,9 @@ Unlike clustering which is an unsupervised technique, meaning that there are not
 
 ![](classification.png)
 
-One type of clustering algorithm is **Decision Trees**, which learn decision rules from data features to build a tree that can be followed to determine the chosen class for a new data point. It uses if-then rules to determine what action to take at a specific node/situation. 
+One type of clustering algorithm is **Decision Trees**, which learn decision rules from data features to build a tree that can be followed to determine the chosen class for a new data point. It uses if-then rules to determine what action to take at a specific node/situation.
 
-![](tree.png)
-**Iris Example**
+![](tree.png) **Iris Example**
 
 ```{r}
 set.seed(222)
@@ -22,7 +21,6 @@ test <- iris[index==2,]
 
 ```
 
-
 ```{r message=FALSE}
 library(tree)
 
@@ -30,7 +28,6 @@ irisTree <- tree(Species ~ ., data = train)
 plot(irisTree, lwd = 2)
 text(irisTree, cex = 0.7)
 ```
-
 
 ```{r message=FALSE}
 predict_frame_iris <- data.frame(test, prediction = predict(irisTree, test, type = "class"))
@@ -41,7 +38,6 @@ train_con_mat = confusionMatrix(train_tab, positive = "setosa")
 train_con_mat
 
 ```
-
 
 **Random Forest**
 
@@ -60,5 +56,3 @@ confusionMatrix(p2, test$Species)
 ```{r}
 plot(randomforest)
 ```
-
-

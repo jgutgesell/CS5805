@@ -22,6 +22,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -151,14 +185,14 @@ ul.task-list li input[type="checkbox"] {
 <p>To describe the probabilities that random variable <span class="math inline">\(x\)</span> can take on each specific outcome of the event we can use a <strong>probability distribution</strong>. There are two different types of probability distributions: discrete and continuous.</p>
 <p><strong>Discrete Distributions</strong></p>
 <p>Discrete distributions are when the outcomes are finite like heads or tails of a coin. A Bernoulli distribution is an example of a discrete distribution where there are only 2 potential outcomes. The probability mass function of a Bernoulli distribution of a fair coin flip is P(x) = {0.5 if x = heads, 0.5 if x = tails}.</p>
-<p><strong>Continous Distributions</strong></p>
+<p><strong>Continuous Distributions</strong></p>
 <p>Continuous distributions have infinitely many outcomes, for example heights. One well known continuous distribution is the normal distribution which can be visualized with the bell curve.</p>
 <div class="cell">
 <div class="cell-output-display">
 <p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Unlike discrete distributions where the value of the probability mass function at <span class="math inline">\(x\)</span> is the probability of of <span class="math inline">\(x\)</span>, in the continuous distribution since there are infinitely many outcomes the probability of X = <span class="math inline">\(x\)</span> is actually 0. All of our probabilities must sum to 1, when looking at the normal distribution curve that means that the area under the curve must also be 1. So instead of using a summation, we look at intervals in the continous case.</p>
+<p>Unlike discrete distributions where the value of the probability mass function at <span class="math inline">\(x\)</span> is the probability of of <span class="math inline">\(x\)</span>, in the continuous distribution since there are infinitely many outcomes the probability of X = <span class="math inline">\(x\)</span> is actually 0. All of our probabilities must sum to 1, when looking at the normal distribution curve that means that the area under the curve must also be 1. So instead of using a summation, we look at intervals in the continuous case.</p>
 <p><img src="integral.png" class="img-fluid"></p>
 <p>So instead of looking at the probability of an event at a specific value which we now know is 0, we can use ranges of X and calculate the area under the curve for those ranges to find meaningful probabilities in the continuous case. We can use something called the cumulative distribution function which takes the probability density function we saw above and calculates the area under the curve to the left of <span class="math inline">\(x\)</span>. This is what the CDF of the normal distribution looks like:</p>
 <div class="cell">
@@ -166,10 +200,122 @@ ul.task-list li input[type="checkbox"] {
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>Now we can see probabilities much easier such as P(<span class="math inline">\(x\)</span> &lt; -3) is nearly 0 and P(<span class="math inline">\(x\)</span> &lt; 3) is nearly 1.</p>
+<p>Now we can see probabilities much easier such as <span class="math inline">\(P(x &lt; -3)\)</span> is nearly 0 and <span class="math inline">\(P(x &lt; 3)\)</span> is nearly 1.</p>
 <p><strong>Conditional Probability Distributions</strong></p>
+<p>In order to understand Bayes’ Rule we first must understand conditional probabilities. Oftentimes, the probabilities we are interested in are dependent on another event. The conditional probability of <strong>x given y</strong> is:</p>
+<p><img src="conditional.png" class="img-fluid"></p>
+<p>By multiplying by <span class="math inline">\(P(y)\)</span> we get the <strong>chain rule</strong> of probability: <span class="math inline">\(P(x,y) = P(x|y) P(y)\)</span></p>
 <p><strong>Bayesian Probability and Bayes’ Rule</strong></p>
 <p>A well known probability philosophy is <strong>Bayesian Probability</strong>. Unlike an objective perspective where known beliefs are used, a subjective perspective where the observer’s own learnings and experience are used, Bayesian probability combines prior beliefs with observations. We can use Bayes’ Rule to calculate our probabilities.</p>
+<p>Back to our chain rule, we can write equivalent statments</p>
+<ul>
+<li><span class="math inline">\(P(x,y) = P(x|y) P(y)\)</span></li>
+<li><span class="math inline">\(P(x,y) = P(y|x) P(x)\)</span></li>
+</ul>
+<p>If we set these to be equal and divide by <span class="math inline">\(P(y)\)</span> we get Bayes’ Rule:</p>
+<p><img src="Bayes.png" class="img-fluid"></p>
+<p>This rule allows us update our beliefs as we gain more observations. The prior probability, which is what initial probability of an event, and the posterior probability is the probability after adding in our new observation.</p>
+<p><strong>Naive Bayes</strong></p>
+<p>Naive Bayes use Bayes’ Rule but with a couple key assumptions:</p>
+<ul>
+<li>Predictors are conditionally independent</li>
+<li>All features contribute equally to the outcome</li>
+</ul>
+<p>Although this may not lead to the most complete and accurate model in real life, it allows us to simplify the problem.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caret)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(e1071)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(caTools)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># split data into train and test splits</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">222</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>index <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">2</span>, <span class="fu">nrow</span>(iris), <span class="at">replace =</span> <span class="cn">TRUE</span>, <span class="at">prob =</span> <span class="fu">c</span>(<span class="fl">0.7</span>, <span class="fl">0.3</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>train <span class="ot">&lt;-</span> iris[index<span class="sc">==</span><span class="dv">1</span>,]</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>test <span class="ot">&lt;-</span> iris[index<span class="sc">==</span><span class="dv">2</span>,]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>bayes <span class="ot">&lt;-</span> <span class="fu">naiveBayes</span>(Species <span class="sc">~</span> ., <span class="at">data =</span> train)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>bayes</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Naive Bayes Classifier for Discrete Predictors
+
+Call:
+naiveBayes.default(x = X, y = Y, laplace = laplace)
+
+A-priori probabilities:
+Y
+    setosa versicolor  virginica 
+ 0.3168317  0.3465347  0.3366337 
+
+Conditional probabilities:
+            Sepal.Length
+Y                [,1]      [,2]
+  setosa     5.021875 0.3526255
+  versicolor 5.874286 0.5505841
+  virginica  6.558824 0.6339475
+
+            Sepal.Width
+Y                [,1]      [,2]
+  setosa     3.475000 0.3698300
+  versicolor 2.768571 0.2997758
+  virginica  2.941176 0.3026325
+
+            Petal.Length
+Y                [,1]      [,2]
+  setosa     1.475000 0.1703886
+  versicolor 4.211429 0.5166472
+  virginica  5.538235 0.5570565
+
+            Petal.Width
+Y                [,1]      [,2]
+  setosa     0.240625 0.1011526
+  versicolor 1.320000 0.2111593
+  virginica  2.029412 0.2480584</code></pre>
+</div>
+</div>
+<p>We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(bayes, <span class="at">newdata =</span> test)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>confusion <span class="ot">&lt;-</span> <span class="fu">table</span>(test<span class="sc">$</span>Species, prediction)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(confusion)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Confusion Matrix and Statistics
+
+            prediction
+             setosa versicolor virginica
+  setosa         18          0         0
+  versicolor      0         15         0
+  virginica       0          2        14
+
+Overall Statistics
+                                         
+               Accuracy : 0.9592         
+                 95% CI : (0.8602, 0.995)
+    No Information Rate : 0.3673         
+    P-Value [Acc &gt; NIR] : &lt; 2.2e-16      
+                                         
+                  Kappa : 0.9387         
+                                         
+ Mcnemar's Test P-Value : NA             
+
+Statistics by Class:
+
+                     Class: setosa Class: versicolor Class: virginica
+Sensitivity                 1.0000            0.8824           1.0000
+Specificity                 1.0000            1.0000           0.9429
+Pos Pred Value              1.0000            1.0000           0.8750
+Neg Pred Value              1.0000            0.9412           1.0000
+Prevalence                  0.3673            0.3469           0.2857
+Detection Rate              0.3673            0.3061           0.2857
+Detection Prevalence        0.3673            0.3061           0.3265
+Balanced Accuracy           1.0000            0.9412           0.9714</code></pre>
+</div>
+</div>
+<p>We see that we get a model accuracy of 95% which is very good.</p>
+<p><strong>Images used can be found <a href="https://towardsdatascience.com/probability-fundamentals-of-machine-learning-part-1-a156b4703e69">here</a></strong></p>
 
 
 

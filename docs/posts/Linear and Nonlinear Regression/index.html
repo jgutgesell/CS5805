@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Julia Gutgesell">
-<meta name="dcterms.date" content="2023-11-16">
+<meta name="dcterms.date" content="2023-11-22">
 
 <title>CS5805 - Linear and Nonlinear Regression</title>
 <style>
@@ -96,6 +96,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="../../styles.css">
 </head>
@@ -138,12 +140,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Linear and Nonlinear Regression</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">news</div>
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">analysis</div>
-              </div>
-                  </div>
+                      </div>
   </div>
     
   
@@ -159,7 +156,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 16, 2023</p>
+        <p class="date">November 22, 2023</p>
       </div>
     </div>
     
@@ -177,13 +174,72 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>This is a post with executable code.</p>
+<p><strong>Linear Regression</strong></p>
+<p>Linear regression is the process of creating a line that best fits the data that can be used to predict the value of the response variable for new data.</p>
+<p>If we want to fit a linear model to our data it is important that we make sure that there is a linear relationship to model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cars, <span class="fu">aes</span>(<span class="at">x=</span>speed, <span class="at">y=</span>dist)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Stopping Distance of Cars"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>In this example of stopping distances of cars at different speeds, we can use a scatterplot to visualize the data first to see that we have a linear relationship that can be modeled. When we have more than just 2 variables that we are considering to use in our model we can use a scatterplot matrix to visualize all the scatterplots at once.</p>
+<p>Another tool to determine the linear association between two variables is <strong>correlation</strong>. The closer that the correlation coefficient <strong>r</strong> is to -1 or 1, the stronger the linear relationship. Something to keep in mind is that correlation is not a complete indicator of a relationship between the variables. If there is a polynomial relationship the correlation will be low, as well as outliers can make it seem like there is a linear relationship when there is not.</p>
+<p><strong>Regression Equations</strong></p>
+<p>If we see that there is a linear relationship that we can model, the next step is to estimate that line, called the least-squares or fitted regression line.</p>
+<p>The true mean response variable <span class="math inline">\(Y\)</span> conditioned on <span class="math inline">\(X\)</span> can be written:</p>
+<p><span class="math inline">\(\mu_{Y|X} = \beta_0 + \beta_1 X\)</span></p>
+<p>The statistical linear model, which looks at individual response variables <span class="math inline">\(Y_i\)</span> can be written:</p>
+<p><span class="math inline">\(Y_i = \beta_0 + \beta_1 X + \varepsilon_i\)</span></p>
+<p>Where <span class="math inline">\(\beta_i\)</span> is the true regression coefficients that are unknown and <span class="math inline">\(\varepsilon_i \sim N(0,\sigma^2)\)</span> is the random error or residuals.</p>
+<p><strong>Finding Regression Line in R</strong></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>model <span class="ot">&lt;-</span> <span class="fu">lm</span>(dist <span class="sc">~</span> speed, <span class="at">data=</span>cars)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>model<span class="sc">$</span>coefficients</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<pre><code>(Intercept)       speed 
+ -17.579095    3.932409 </code></pre>
 </div>
 </div>
+<p>The line that our linear model found is <strong>Distance = -17.6 + 3.9 Speed</strong>.</p>
+<p>We can plot our line over our data to see how well it fits.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(cars, <span class="fu">aes</span>(<span class="at">x=</span>speed, <span class="at">y=</span>dist)) <span class="sc">+</span> <span class="fu">geom_point</span>() <span class="sc">+</span> <span class="fu">theme_bw</span>() <span class="sc">+</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>, <span class="at">se =</span> F) <span class="sc">+</span> <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"The Stopping Distance of Cars"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`geom_smooth()` using formula = 'y ~ x'</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>It looks like a decent fit, but we can also look at the full estimate table of our model to see our <span class="math inline">\(R^2\)</span> and the significance of our predictors.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(model)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = dist ~ speed, data = cars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-29.069  -9.525  -2.272   9.215  43.201 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -17.5791     6.7584  -2.601   0.0123 *  
+speed         3.9324     0.4155   9.464 1.49e-12 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 15.38 on 48 degrees of freedom
+Multiple R-squared:  0.6511,    Adjusted R-squared:  0.6438 
+F-statistic: 89.57 on 1 and 48 DF,  p-value: 1.49e-12</code></pre>
+</div>
+</div>
+<p>We see that speed is significant and we should use it in our model, later we will look at what to do if we find that some of our variables are not significant. Our <span class="math inline">\(R^2\)</span> means that 65% of the variance of stopping distance can be explained by speed.</p>
 
 
 

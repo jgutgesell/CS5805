@@ -1,13 +1,60 @@
 ---
 title: "Linear and Nonlinear Regression"
 author: "Julia Gutgesell"
-date: "2023-11-16"
-categories: [news, code, analysis]
-image: "image.jpg"
+date: "2023-11-22"
 ---
 
-This is a post with executable code.
+**Linear Regression**
+
+Linear regression is the process of creating a line that best fits the data that can be used to predict the value of the response variable for new data. 
+
+
+If we want to fit a linear model to our data it is important that we make sure that there is a linear relationship to model. 
 
 ```{r}
-1 + 1
+library(ggplot2)
+ggplot(cars, aes(x=speed, y=dist)) + geom_point() + theme_bw() +
+  labs(title = "The Stopping Distance of Cars")
 ```
+
+In this example of stopping distances of cars at different speeds, we can use a scatterplot to visualize the data first to see that we have a linear relationship that can be modeled. When we have more than just 2 variables that we are considering to use in our model we can use a scatterplot matrix to visualize all the scatterplots at once. 
+
+Another tool to determine the linear association between two variables is **correlation**. The closer that the correlation coefficient **r** is to -1 or 1, the stronger the linear relationship. Something to keep in mind is that correlation is not a complete indicator of a relationship between the variables. If there is a polynomial relationship the correlation will be low, as well as outliers can make it seem like there is a linear relationship when there is not. 
+
+
+**Regression Equations**
+
+If we see that there is a linear relationship that we can model, the next step is to estimate that line, called the least-squares or fitted regression line.
+
+The true mean response variable $Y$ conditioned on $X$ can be written:
+
+$\mu_{Y|X} = \beta_0 + \beta_1 X$
+
+The statistical linear model, which looks at individual response variables $Y_i$ can be written:
+
+$Y_i = \beta_0 + \beta_1 X + \varepsilon_i$
+
+Where $\beta_i$ is the true regression coefficients that are unknown and $\varepsilon_i \sim N(0,\sigma^2)$ is the random error or residuals. 
+
+**Finding Regression Line in R**
+
+```{r}
+model <- lm(dist ~ speed, data=cars)
+model$coefficients
+```
+
+The line that our linear model found is **Distance = -17.6 + 3.9 Speed**.
+
+We can plot our line over our data to see how well it fits. 
+
+```{r}
+ggplot(cars, aes(x=speed, y=dist)) + geom_point() + theme_bw() +
+  geom_smooth(method = "lm", se = F) + labs(title = "The Stopping Distance of Cars")
+```
+
+It looks like a decent fit, but we can also look at the full estimate table of our model to see our $R^2$ and the significance of our predictors.
+
+```{r}
+summary(model)
+```
+We see that speed is significant and we should use it in our model, later we will look at what to do if we find that some of our variables are not significant. Our $R^2$ means that 65% of the variance of stopping distance can be explained by speed.

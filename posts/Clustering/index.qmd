@@ -2,8 +2,6 @@
 title: "Clustering"
 author: "Julia Gutgesell"
 date: "2023-11-18"
-categories: [news, code, analysis]
-image: "image.jpg"
 ---
 
 Clustering is an unsupervised learning method that divides data points into a number of groups based on similar properties. There are multiple different clustering methods vary in the distance calculations to determine the clusters. Some of these algorithms are:

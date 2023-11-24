@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Julia Gutgesell">
-<meta name="dcterms.date" content="2023-11-16">
+<meta name="dcterms.date" content="2023-11-24">
 
-<title>CS5805 - Anomaly and Outlier Detection</title>
+<title>Julia Gutgesell’s Machine Learning Blog - Anomaly and Outlier Detection</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -108,7 +108,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div class="navbar-container container-fluid">
       <div class="navbar-brand-container">
     <a class="navbar-brand" href="../../index.html">
-    <span class="navbar-title">CS5805</span>
+    <span class="navbar-title">Julia Gutgesell’s Machine Learning Blog</span>
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
@@ -122,7 +122,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/jgutgesell" rel="" target=""><i class="bi bi-github" role="img">
 </i> 
  <span class="menu-text"></span></a>
   </li>  
@@ -138,12 +138,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Anomaly and Outlier Detection</h1>
-                                <div class="quarto-categories">
-                <div class="quarto-category">news</div>
-                <div class="quarto-category">code</div>
-                <div class="quarto-category">analysis</div>
-              </div>
-                  </div>
+                      </div>
   </div>
     
   
@@ -159,7 +154,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">November 16, 2023</p>
+        <p class="date">November 24, 2023</p>
       </div>
     </div>
     
@@ -177,13 +172,28 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 
-<p>This is a post with executable code.</p>
+<p>Anomaly and Outlier Detection are important steps of machine learning because without proper detection, we may be creating models that do not correctly model the population.</p>
+<p><strong>Anomalies</strong> are data points which do not follow the expected pattern/distribution that the rest of the data follows. Anomalies are important because they can translate into relevant information in many cases. For example, if we are looking at all credit card transactions, fraudulent transactions may be caught with anomaly detection since they could be unusual amounts or going to unusual businesses. Through anomaly detection we may be able to find new features to add to the model or a new model.</p>
+<p><strong>Outliers</strong> are observations that have a rare chance of occurring within the dataset because they are far from the other points. Outliers can occur because of human or experimental error, but sometimes we do not know the reason for the outlier. Outlier detection is important because outliers can skew our model and affect the accuracy for future predictions.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dv">1</span> <span class="sc">+</span> <span class="dv">1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 2</code></pre>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456789</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>multishapes <span class="ot">&lt;-</span> multishapes[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
+<p>It is hard for us to know which of these points are going to be outliers, and it is not a good idea to remove outliers for no reason. A model that is robust to outliers is DBSCAN since it only includes points that have a minimum number of points, at least 3, in a radius surrounding the point.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dbscan_res <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(multishapes, <span class="at">eps =</span> <span class="fl">0.15</span>, <span class="at">minPts =</span> <span class="dv">5</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes, <span class="at">col=</span>dbscan_res<span class="sc">$</span>cluster<span class="sc">+</span><span class="dv">1</span>, <span class="at">main=</span><span class="st">"DBSCAN"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. This way we don’t delete our outliers from our dataset, but we do not allow the outliers to lower the accuracy of our model.</p>
 
 
 

@@ -6,10 +6,9 @@ date: "2023-11-22"
 
 **Linear Regression**
 
-Linear regression is the process of creating a line that best fits the data that can be used to predict the value of the response variable for new data. 
+Linear regression is the process of creating a line that best fits the data that can be used to predict the value of the response variable for new data.
 
-
-If we want to fit a linear model to our data it is important that we make sure that there is a linear relationship to model. 
+If we want to fit a linear model to our data it is important that we make sure that there is a linear relationship to model.
 
 ```{r}
 library(ggplot2)
@@ -18,10 +17,9 @@ ggplot(cats, aes(x=Hwt, y=Bwt)) + geom_point() + theme_bw() +
   labs(title = "Body Weight Versus Heart Weight in Cats")
 ```
 
-In this example of body weight and heart weights of cats, we can use a scatterplot to visualize the data first to see that we have a linear relationship that can be modeled. When we have more than just 2 variables that we are considering to use in our model we can use a scatterplot matrix to visualize all the scatterplots at once. 
+In this example of body weight and heart weights of cats, we can use a scatterplot to visualize the data first to see that we have a linear relationship that can be modeled. When we have more than just 2 variables that we are considering to use in our model we can use a scatterplot matrix to visualize all the scatterplots at once.
 
-Another tool to determine the linear association between two variables is **correlation**. The closer that the correlation coefficient **r** is to -1 or 1, the stronger the linear relationship. Something to keep in mind is that correlation is not a complete indicator of a relationship between the variables. If there is a polynomial relationship the correlation will be low, as well as outliers can make it seem like there is a linear relationship when there is not. 
-
+Another tool to determine the linear association between two variables is **correlation**. The closer that the correlation coefficient **r** is to -1 or 1, the stronger the linear relationship. Something to keep in mind is that correlation is not a complete indicator of a relationship between the variables. If there is a polynomial relationship the correlation will be low, as well as outliers can make it seem like there is a linear relationship when there is not.
 
 **Regression Equations**
 
@@ -35,7 +33,7 @@ The statistical linear model, which looks at individual response variables $Y_i$
 
 $Y_i = \beta_0 + \beta_1 X + \varepsilon_i$
 
-Where $\beta_i$ is the true regression coefficients that are unknown and $\varepsilon_i \sim N(0,\sigma^2)$ is the random error or residuals. 
+Where $\beta_i$ is the true regression coefficients that are unknown and $\varepsilon_i \sim N(0,\sigma^2)$ is the random error or residuals.
 
 **Finding Regression Line in R**
 
@@ -46,7 +44,7 @@ model$coefficients
 
 The line that our linear model found is **Body Weight = 1.02 + 0.16 Heart Weight**.
 
-We can plot our line over our data to see how well it fits. 
+We can plot our line over our data to see how well it fits.
 
 ```{r}
 ggplot(cats, aes(x=Hwt, y=Bwt)) + geom_point() + theme_bw() +
@@ -59,23 +57,23 @@ It looks like a decent fit, but we can also look at the full estimate table of o
 ```{r}
 summary(model)
 ```
-We see that heart weight is significant and we should use it in our model, later we will look at what to do if we find that some of our variables are not significant. Our $R^2$ means that 65% of the variance of body weight can be explained by heart weight. That means there are other variables that we don't have that also explain the body weight. 
 
+We see that heart weight is significant and we should use it in our model, later we will look at what to do if we find that some of our variables are not significant. Our $R^2$ means that 65% of the variance of body weight can be explained by heart weight. That means there are other variables that we don't have that also explain the body weight.
 
 **Checking Assumptions**
 
 There are a few key assumptions in order to use a linear model
 
-* The mean of $Y$ is linear in $X$
-* The errors $\varepsilon_i$ are independent and identically distributed
+-   The mean of $Y$ is linear in $X$
+-   The errors $\varepsilon_i$ are independent and identically distributed
 
 To check our linearity assumption we can look at the original plot to make sure it looks linear as well as look at a plot of the residuals versus the predicted values from our model.
 
 ```{r}
 plot(rstudent(model) ~ fitted(model))
 ```
-Since we don't see any big curvature, we can say that this model meets the linearity assumption.
 
+Since we don't see any big curvature, we can say that this model meets the linearity assumption.
 
 To check for normality we plot the normal probability plot for the studentized residuals.
 
@@ -84,7 +82,6 @@ qqnorm(rstudent(model))
 qqline(rstudent(model))
 ```
 
-
 To check for constant variance across the observations we plot the residuals versus the fitted values. If we see any fan shape or pattern then we have violated the assumption.
 
 ```{r}
@@ -92,16 +89,16 @@ plot(rstudent(model) ~ fitted(model))
 abline(h=0)
 ```
 
-
 When errors are normally distributed, the least-squares method we showed is the best method. When errors follow another distribution we should use different models.
 
 **Robust Regression**
 
 If our data has outliers, we can use robust regression to protect their influence on estimated parameters such as our regression coefficients. The main idea is we use a weighted least-squares where we down weight the outliers to minimize their effect on the coefficients.
 
-What makes robust regression different is the **M-estimator** that is used. M-estimators are a generalization of least-squares where our $\beta$ is chosen to minimize a loss function. We use a function of the residuals $\rho$ which has multiple options. We will look at 2 different $\rho$ functions: **Huber and Bi-weight**. 
+What makes robust regression different is the **M-estimator** that is used. M-estimators are a generalization of least-squares where our $\beta$ is chosen to minimize a loss function. We use a function of the residuals $\rho$ which has multiple options. We will look at 2 different $\rho$ functions: **Huber and Bi-weight**.
 
 We are going to add outliers to the cats dataset we used for simple linear regression above to show how we would use robust regression to minimize their effect.
+
 ```{r}
 newobs <- data.frame( "Sex" = factor(c("F","F", "M", "F", "M")),
 "Bwt" = c(3.5, 3.2, 3.1, 3.4, 2.9),
@@ -127,7 +124,7 @@ geom_line(data = data.frame("Bwt" = mycats$Bwt, "Hwt" = model_bisquare$fitted.va
 color = "green", size = 1.05)
 ```
 
-* blue line: ordinary least-squares on original data
-* red line: ordinary least-squares with outliers
-* magenta line: robust linear model with Huber method
-* green lineL: robust linear model with Bi-square method
+-   blue line: ordinary least-squares on original data
+-   red line: ordinary least-squares with outliers
+-   magenta line: robust linear model with Huber method
+-   green lineL: robust linear model with Bi-square method

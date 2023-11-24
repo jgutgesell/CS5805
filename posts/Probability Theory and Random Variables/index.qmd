@@ -2,7 +2,6 @@
 title: "Probability Theory and Random Variables"
 author: "Julia Gutgesell"
 date: "2023-11-21"
-categories: [news, code, analysis]
 ---
 
 Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty.
@@ -49,7 +48,7 @@ Now we can see probabilities much easier such as $P(x < -3)$ is nearly 0 and $P(
 
 In order to understand Bayes' Rule we first must understand conditional probabilities. Oftentimes, the probabilities we are interested in are dependent on another event. The conditional probability of **x given y** is:
 
-![](conditional.png) 
+![](conditional.png)
 
 By multiplying by $P(y)$ we get the **chain rule** of probability: $P(x,y) = P(x|y) P(y)$
 
@@ -59,23 +58,21 @@ A well known probability philosophy is **Bayesian Probability**. Unlike an objec
 
 Back to our chain rule, we can write equivalent statments
 
-* $P(x,y) = P(x|y) P(y)$
-* $P(x,y) = P(y|x) P(x)$
+-   $P(x,y) = P(x|y) P(y)$
+-   $P(x,y) = P(y|x) P(x)$
 
 If we set these to be equal and divide by $P(y)$ we get Bayes' Rule:
 
 ![](Bayes.png)
 
-This rule allows us update our beliefs as we gain more observations. The prior probability, which is what initial probability of an event, and the posterior probability is the probability after adding in our new observation. 
-
-
+This rule allows us update our beliefs as we gain more observations. The prior probability, which is what initial probability of an event, and the posterior probability is the probability after adding in our new observation.
 
 **Naive Bayes**
 
 Naive Bayes use Bayes' Rule but with a couple key assumptions:
 
-* Predictors are conditionally independent
-* All features contribute equally to the outcome 
+-   Predictors are conditionally independent
+-   All features contribute equally to the outcome
 
 Although this may not lead to the most complete and accurate model in real life, it allows us to simplify the problem.
 
@@ -94,11 +91,11 @@ test <- iris[index==2,]
 
 ```
 
-
 ```{r}
 bayes <- naiveBayes(Species ~ ., data = train)
 bayes
 ```
+
 We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors.
 
 ```{r}
@@ -109,6 +106,5 @@ confusionMatrix(confusion)
 ```
 
 We see that we get a model accuracy of 95% which is very good.
-
 
 **Images used can be found [here](https://towardsdatascience.com/probability-fundamentals-of-machine-learning-part-1-a156b4703e69)**

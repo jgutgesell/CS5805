@@ -2,9 +2,9 @@
 title: "CS5805"
 listing:
   contents: posts
-  sort: "date desc"
-  type: default
-  categories: true
+  sort: "date asc"
+  type: grid
+  categories: false
   sort-ui: false
   filter-ui: false
 page-layout: full

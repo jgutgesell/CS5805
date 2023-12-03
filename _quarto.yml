@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  repo-url: https://github.com/jgutgesell/CS5805
+  repo-url: https://github.com/jgutgesell/CS5805?files=1
   repo-actions: [source]
   title: "Julia Gutgesell's Machine Learning Blog"
   navbar:

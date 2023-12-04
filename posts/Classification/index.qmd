@@ -12,6 +12,8 @@ One type of clustering algorithm is **Decision Trees**, which learn decision rul
 
 ![](tree.png) **Iris Example**
 
+First we will split out dataset into the training and testing datasets.
+
 ```{r}
 set.seed(222)
 index <- sample(2, nrow(iris), replace = TRUE, prob = c(0.7, 0.3))
@@ -20,6 +22,8 @@ test <- iris[index==2,]
 
 ```
 
+Using the tree library we can train our decision tree with our training dataset and look at our tree. 
+
 ```{r message=FALSE}
 library(tree)
 
@@ -27,16 +31,42 @@ irisTree <- tree(Species ~ ., data = train)
 plot(irisTree, lwd = 2)
 text(irisTree, cex = 0.7)
 ```
+If we wanted to classify new data points by hand we could follow the tree down based on its values. For small trees like this one it is possible, but for larger datasets with many more variables it will become very complicated. 
+
+If we look closely at our tree we will notice that our tree only uses the Petal length and width to classify the points, since the Sepal width leads to Versicolor both times. We can visualize our tree with the test points to see how they would be classified.
+
 
 ```{r message=FALSE}
-predict_frame_iris <- data.frame(test, prediction = predict(irisTree, test, type = "class"))
+predict_frame_iris <- data.frame(test, prediction =
+                                   predict(irisTree, test, type = "class"))
 
 library(caret)
-(train_tab = table(predict_frame_iris$Species, predict_frame_iris$prediction))
+train_tab = table(predict_frame_iris$Species, predict_frame_iris$prediction)
 train_con_mat = confusionMatrix(train_tab, positive = "setosa")
 train_con_mat
+```
+
+We can see that there are 3 points in our test set that were labeled versicolor when they are actually virginicas. We can transform our tree into 2-dimensional space to see our misclassified points.
+
+
+```{r}
+library(ggplot2)
+ggplot(test, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+geom_point() + geom_rect(aes(xmin = 0, xmax = 2.45, ymin = 0, ymax = 2.6 ), 
+    fill = NA, color = "red", alpha = 0.25) +
+geom_rect(aes(xmin = 2.45, xmax = 7, ymin = 0, ymax = 1.65), 
+    fill = NA, color = "green", alpha = 0.25) +
+geom_rect(aes(xmin = 2.45, xmax = 7, ymin = 1.65, ymax = 2.6), 
+    fill = NA, color = "blue", alpha = 0.25) +
+annotate(geom = "text", x = 1.5, y = 0.8, label = "setosa", color = "red") +
+annotate(geom = "text", x = 4.5, y = 0.8, label = "versicolor", color = "green") +
+annotate(geom = "text", x = 3.5, y = 2, label = "virginica", color = "blue") +
+scale_x_continuous(breaks = c(0, 2.45, 4.95, 6.9)) + 
+scale_y_continuous(breaks = c(0, 1.75, 2.5))
 
 ```
+
+
 
 **Random Forest**
 
@@ -52,6 +82,11 @@ confusionMatrix(p2, test$Species)
 
 ```
 
+We see that in this situation we get the same results as our decision tree. This means that our iris example is not prone to the overfitting that can occur in decision trees. However, for other datasets the issue of overfitting may exist and that is when we should use random forest.
+
+We can also plot our error rate of our random forest. Where the red line is for Setosa, blue is Versicolor, and green is Virginica. Since this is not a situation that random forest improves upon our accuracy we can see that the error is lowest between 0 and 100 trees. 
 ```{r}
 plot(randomforest)
 ```
+
+We have seen in this post how to classify a dataset using Decision Trees and Random Forest. We learned that a Decision Tree has combinations of decisions to classify our data and Random Forest is a combination of Decision Trees averaged to reduce overfitting. We can chose between the two depending on our needs. Decision Trees are faster but Random Forests tend to be more accurate. 

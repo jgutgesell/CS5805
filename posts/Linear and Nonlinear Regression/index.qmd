@@ -4,8 +4,6 @@ author: "Julia Gutgesell"
 date: "2023-11-22"
 ---
 
-**Linear Regression**
-
 Linear regression is the process of creating a line that best fits the data that can be used to predict the value of the response variable for new data.
 
 If we want to fit a linear model to our data it is important that we make sure that there is a linear relationship to model.
@@ -46,7 +44,7 @@ The line that our linear model found is **Body Weight = 1.02 + 0.16 Heart Weight
 
 We can plot our line over our data to see how well it fits.
 
-```{r}
+```{r message=FALSE}
 ggplot(cats, aes(x=Hwt, y=Bwt)) + geom_point() + theme_bw() +
   geom_smooth(method = "lm", se = F) + 
   labs(title = "Body Weight Versus Heart Weight in Cats")
@@ -82,6 +80,8 @@ qqnorm(rstudent(model))
 qqline(rstudent(model))
 ```
 
+We see some slight deviation from the line at the beginning and end, but it is not very much so we can assume normality is satisfied.
+
 To check for constant variance across the observations we plot the residuals versus the fitted values. If we see any fan shape or pattern then we have violated the assumption.
 
 ```{r}
@@ -89,7 +89,7 @@ plot(rstudent(model) ~ fitted(model))
 abline(h=0)
 ```
 
-When errors are normally distributed, the least-squares method we showed is the best method. When errors follow another distribution we should use different models.
+When errors are normally distributed as we see above, the least-squares method we showed is the best method. When errors follow another distribution we should use different models.
 
 **Robust Regression**
 
@@ -106,25 +106,30 @@ newobs <- data.frame( "Sex" = factor(c("F","F", "M", "F", "M")),
 
 mycats <- rbind(cats, newobs)
 
-ggplot(mycats, aes(x = Bwt, y = Hwt)) + geom_point() + theme_bw() + geom_point(data = newobs, aes(x = Bwt, y = Hwt), color = "red", size = 2)
+ggplot(mycats, aes(x = Bwt, y = Hwt)) + geom_point() + theme_bw() + 
+  geom_point(data = newobs, aes(x = Bwt, y = Hwt), color = "red", size = 2)
 ```
 
 Let's compare how ordinary least-squares, robust regression using Huber method, and robust regression using Bi-square method.
 
-```{r}
+```{r message=FALSE}
 model_OLS <- lm(Hwt ~ Bwt, data = mycats)
 model_huber <- rlm(Hwt ~ Bwt, data = mycats, psi = psi.huber)
 model_bisquare <- rlm(Hwt ~ Bwt, data = mycats, psi = psi.bisquare)
 
 
-ggplot(mycats, aes(x = Bwt, y = Hwt)) + geom_point() + theme_bw() + geom_point(data = newobs, aes(x = Bwt, y = Hwt), color = "red", size = 2) + geom_smooth(method = "lm", se = F, color = "red") +
-geom_smooth(method = "rlm", se = F, color = "magenta") +
-geom_smooth(data = cats, aes(x = Bwt, y = Hwt), method = "lm", se=F, color = "blue") +
-geom_line(data = data.frame("Bwt" = mycats$Bwt, "Hwt" = model_bisquare$fitted.values),
-color = "green", size = 1.05)
+ggplot(mycats, aes(x = Bwt, y = Hwt)) + geom_point() + theme_bw() + 
+  geom_point(data = newobs, aes(x = Bwt, y = Hwt), color = "red", size = 2) +   
+  geom_smooth(method = "lm", se = F, color = "red") +
+  geom_smooth(method = "rlm", se = F, color = "magenta") +
+  geom_smooth(data = cats, aes(x = Bwt, y = Hwt), method = "lm", se=F, color = "blue") +
+  geom_line(data = data.frame("Bwt" = mycats$Bwt, "Hwt" = model_bisquare$fitted.values),
+            color = "green", linewidth = 1.05)
 ```
 
 -   blue line: ordinary least-squares on original data
 -   red line: ordinary least-squares with outliers
 -   magenta line: robust linear model with Huber method
--   green lineL: robust linear model with Bi-square method
+-   green line: robust linear model with Bi-square method
+
+We can see that the red line, which is the one if we did ordinary least-squares on our data with the addition of the outliers that it would not fit the data as well as the other lines. We do see that all the other 3 lines are very close together meaning both Huber method and Bi-square method do a good job at returning the line to where it would be without outliers. This is important since we do not want our outliers to worsen our models and their predictions since we want to predict normal data not outlier data.

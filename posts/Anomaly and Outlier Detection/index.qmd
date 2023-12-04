@@ -10,6 +10,7 @@ Anomaly and Outlier Detection are important steps of machine learning because wi
 
 **Outliers** are observations that have a rare chance of occurring within the dataset because they are far from the other points. Outliers can occur because of human or experimental error, but sometimes we do not know the reason for the outlier. Outlier detection is important because outliers can skew our model and affect the accuracy for future predictions.
 
+One method that is used for outlier detection is **DBSCAN -** Density-Based Spacial Clustering of Applications With Noise. In order for a point to be considered in the clustering algorithm it must be within a radius of a core point (one with a minimum number of points in its radius). If this condition is not satisfied, DBSCAN will exclude the point - marking it as an outlier. We will use the multishapes dataset to show this concept.
 
 ```{r message=FALSE}
 library(dbscan)
@@ -18,12 +19,12 @@ set.seed(123456789)
 multishapes <- multishapes[, 1:2]
 plot(multishapes)
 ```
-It is hard for us to know which of these points are going to be outliers, and it is not a good idea to remove outliers for no reason. A model that is robust to outliers is DBSCAN since it only includes points that have a minimum number of points, at least 3, in a radius surrounding the point. 
 
+It is hard for us to know which of these points are going to be outliers, and it is not a good idea to remove outliers for no reason. A model that is robust to outliers is DBSCAN since it only includes points that have a minimum number of points, at least 3, in a radius surrounding the point.
 
 ```{r}
 dbscan_res <- dbscan(multishapes, eps = 0.15, minPts = 5)
 plot(multishapes, col=dbscan_res$cluster+1, main="DBSCAN")
 ```
 
-All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. This way we don't delete our outliers from our dataset, but we do not allow the outliers to lower the accuracy of our model.
+All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. We need methods like these to do outlier detection since it is not advised to delete outliers, and we do not want our outliers to make our models inaccurate.

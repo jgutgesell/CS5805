@@ -175,6 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Anomaly and Outlier Detection are important steps of machine learning because without proper detection, we may be creating models that do not correctly model the population.</p>
 <p><strong>Anomalies</strong> are data points which do not follow the expected pattern/distribution that the rest of the data follows. Anomalies are important because they can translate into relevant information in many cases. For example, if we are looking at all credit card transactions, fraudulent transactions may be caught with anomaly detection since they could be unusual amounts or going to unusual businesses. Through anomaly detection we may be able to find new features to add to the model or a new model.</p>
 <p><strong>Outliers</strong> are observations that have a rare chance of occurring within the dataset because they are far from the other points. Outliers can occur because of human or experimental error, but sometimes we do not know the reason for the outlier. Outlier detection is important because outliers can skew our model and affect the accuracy for future predictions.</p>
+<p>One method that is used for outlier detection is <strong>DBSCAN -</strong> Density-Based Spacial Clustering of Applications With Noise. In order for a point to be considered in the clustering algorithm it must be within a radius of a core point (one with a minimum number of points in its radius). If this condition is not satisfied, DBSCAN will exclude the point - marking it as an outlier. We will use the multishapes dataset to show this concept.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
@@ -193,7 +194,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><img src="index_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
-<p>All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. This way we don’t delete our outliers from our dataset, but we do not allow the outliers to lower the accuracy of our model.</p>
+<p>All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. We need methods like these to do outlier detection since it is not advised to delete outliers, and we do not want our outliers to make our models inaccurate.</p>
 
 
 <!-- -->
@@ -496,23 +497,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>**Outliers** are observations that have a rare chance of occurring within the dataset because they are far from the other points. Outliers can occur because of human or experimental error, but sometimes we do not know the reason for the outlier. Outlier detection is important because outliers can skew our model and affect the accuracy for future predictions.</span>
 <span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{r message=FALSE}</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456789</span>)</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>multishapes <span class="ot">&lt;-</span> multishapes[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes)</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>It is hard for us to know which of these points are going to be outliers, and it is not a good idea to remove outliers for no reason. A model that is robust to outliers is DBSCAN since it only includes points that have a minimum number of points, at least 3, in a radius surrounding the point. </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>One method that is used for outlier detection is **DBSCAN -** Density-Based Spacial Clustering of Applications With Noise. In order for a point to be considered in the clustering algorithm it must be within a radius of a core point (one with a minimum number of points in its radius). If this condition is not satisfied, DBSCAN will exclude the point - marking it as an outlier. We will use the multishapes dataset to show this concept.</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="in">```{r message=FALSE}</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dbscan)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(factoextra)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">123456789</span>)</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>multishapes <span class="ot">&lt;-</span> multishapes[, <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>dbscan_res <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(multishapes, <span class="at">eps =</span> <span class="fl">0.15</span>, <span class="at">minPts =</span> <span class="dv">5</span>)</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes, <span class="at">col=</span>dbscan_res<span class="sc">$</span>cluster<span class="sc">+</span><span class="dv">1</span>, <span class="at">main=</span><span class="st">"DBSCAN"</span>)</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. This way we don't delete our outliers from our dataset, but we do not allow the outliers to lower the accuracy of our model.</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>It is hard for us to know which of these points are going to be outliers, and it is not a good idea to remove outliers for no reason. A model that is robust to outliers is DBSCAN since it only includes points that have a minimum number of points, at least 3, in a radius surrounding the point.</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>dbscan_res <span class="ot">&lt;-</span> <span class="fu">dbscan</span>(multishapes, <span class="at">eps =</span> <span class="fl">0.15</span>, <span class="at">minPts =</span> <span class="dv">5</span>)</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(multishapes, <span class="at">col=</span>dbscan_res<span class="sc">$</span>cluster<span class="sc">+</span><span class="dv">1</span>, <span class="at">main=</span><span class="st">"DBSCAN"</span>)</span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>All the points in black are considered outliers. We can see that some of the points we may have initially thought were outliers are, but there are some points that could have been hard to indentify just using the human eye. We need methods like these to do outlier detection since it is not advised to delete outliers, and we do not want our outliers to make our models inaccurate.</span>
 </code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

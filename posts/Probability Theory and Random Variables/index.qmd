@@ -100,11 +100,24 @@ We see that our Naive Bayes function calculates our prior probabilities and the 
 
 ```{r}
 prediction <- predict(bayes, newdata = test)
+prediction_df <- cbind(test, prediction)
 
 confusion <- table(test$Species, prediction)
 confusionMatrix(confusion)
 ```
 
 We see that we get a model accuracy of 95% which is very good.
+
+```{r}
+library(gridExtra)
+p1 <- ggplot(prediction_df, aes(x = Petal.Length, y = Petal.Width, color = Species)) +
+  geom_point()
+p2 <- ggplot(prediction_df, aes(x = Petal.Length, y = Petal.Width, color = prediction)) +
+  geom_point()
+
+grid.arrange(p1, p2, nrow = 1, top="Actual vs Predicted")
+```
+We can see the 2 points that were misclassified on the right side of the versicolors there are 2 virginicas that were classified incorrectly using our Naive Bayes.
+
 
 **Images used can be found [here](https://towardsdatascience.com/probability-fundamentals-of-machine-learning-part-1-a156b4703e69)**

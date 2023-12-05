@@ -175,7 +175,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty.</p>
-<p>Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the some of all probabilities of an event have to equal 1.</p>
+<p>Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the sum of all probabilities of an event have to equal 1.</p>
 <p><img src="axioms.png" class="img-fluid"></p>
 <p>To describe the probabilities that random variable <span class="math inline">\(x\)</span> can take on each specific outcome of the event we can use a <strong>probability distribution</strong>. There are two different types of probability distributions: discrete and continuous.</p>
 <p><strong>Discrete Distributions</strong></p>
@@ -270,7 +270,7 @@ Y                [,1]      [,2]
   virginica  2.029412 0.2480584</code></pre>
 </div>
 </div>
-<p>We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors.</p>
+<p>We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors and this can be used to make predictions on our data.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(bayes, <span class="at">newdata =</span> test)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>prediction_df <span class="ot">&lt;-</span> <span class="fu">cbind</span>(test, prediction)</span>
@@ -310,7 +310,7 @@ Detection Prevalence        0.3673            0.3061           0.3265
 Balanced Accuracy           1.0000            0.9412           0.9714</code></pre>
 </div>
 </div>
-<p>We see that we get a model accuracy of 95% which is very good.</p>
+<p>We see that we get a model accuracy of 95% which is very good. Let’s look at where our misclassification comes from.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(prediction_df, <span class="fu">aes</span>(<span class="at">x =</span> Petal.Length, <span class="at">y =</span> Petal.Width, <span class="at">color =</span> Species)) <span class="sc">+</span></span>
@@ -623,7 +623,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty.</span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the some of all probabilities of an event have to equal 1.</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the sum of all probabilities of an event have to equal 1.</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="al">![](axioms.png)</span></span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a></span>
@@ -713,7 +713,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>bayes</span>
 <span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors.</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors and this can be used to make predictions on our data.</span>
 <span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a>prediction <span class="ot">&lt;-</span> <span class="fu">predict</span>(bayes, <span class="at">newdata =</span> test)</span>
@@ -723,7 +723,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a><span class="fu">confusionMatrix</span>(confusion)</span>
 <span id="cb8-113"><a href="#cb8-113" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-114"><a href="#cb8-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>We see that we get a model accuracy of 95% which is very good.</span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a>We see that we get a model accuracy of 95% which is very good. Let's look at where our misclassification comes from. </span>
 <span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(gridExtra)</span>

@@ -19,6 +19,10 @@ In this example of body weight and heart weights of cats, we can use a scatterpl
 
 Another tool to determine the linear association between two variables is **correlation**. The closer that the correlation coefficient **r** is to -1 or 1, the stronger the linear relationship. Something to keep in mind is that correlation is not a complete indicator of a relationship between the variables. If there is a polynomial relationship the correlation will be low, as well as outliers can make it seem like there is a linear relationship when there is not.
 
+```{r}
+cor(cats$Hwt, cats$Bwt)
+```
+
 **Regression Equations**
 
 If we see that there is a linear relationship that we can model, the next step is to estimate that line, called the least-squares or fitted regression line.
@@ -56,7 +60,7 @@ It looks like a decent fit, but we can also look at the full estimate table of o
 summary(model)
 ```
 
-We see that heart weight is significant and we should use it in our model, later we will look at what to do if we find that some of our variables are not significant. Our $R^2$ means that 65% of the variance of body weight can be explained by heart weight. That means there are other variables that we don't have that also explain the body weight.
+We see that heart weight is significant and we should use it in our model, if we had a predictor that was not significant we should remove that from our model and run it again to obtain a new line. Our $R^2$ value means that 65% of the variance of body weight can be explained by heart weight. This is not an especially high value, and if we could add more variables to try to increase this value.
 
 **Checking Assumptions**
 
@@ -110,7 +114,7 @@ ggplot(mycats, aes(x = Bwt, y = Hwt)) + geom_point() + theme_bw() +
   geom_point(data = newobs, aes(x = Bwt, y = Hwt), color = "red", size = 2)
 ```
 
-Let's compare how ordinary least-squares, robust regression using Huber method, and robust regression using Bi-square method.
+Let's compare ordinary least-squares, robust regression using Huber method, and robust regression using Bi-square method.
 
 ```{r message=FALSE}
 model_OLS <- lm(Hwt ~ Bwt, data = mycats)

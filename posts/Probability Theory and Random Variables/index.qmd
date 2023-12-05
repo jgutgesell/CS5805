@@ -6,7 +6,7 @@ date: "2023-11-21"
 
 Probability theory is an important aspect of many machine learning algorithms since in reality there are very few things that we know with complete certainty.
 
-Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the some of all probabilities of an event have to equal 1.
+Two important properties of probability are that probabilities are between 0 and 1, with 0 being impossible and 1 being certain, and that the sum of all probabilities of an event have to equal 1.
 
 ![](axioms.png)
 
@@ -96,7 +96,7 @@ bayes <- naiveBayes(Species ~ ., data = train)
 bayes
 ```
 
-We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors.
+We see that our Naive Bayes function calculates our prior probabilities and the conditional probabilities for our predictors and this can be used to make predictions on our data.
 
 ```{r}
 prediction <- predict(bayes, newdata = test)
@@ -106,7 +106,7 @@ confusion <- table(test$Species, prediction)
 confusionMatrix(confusion)
 ```
 
-We see that we get a model accuracy of 95% which is very good.
+We see that we get a model accuracy of 95% which is very good. Let's look at where our misclassification comes from. 
 
 ```{r}
 library(gridExtra)
